@@ -6,33 +6,105 @@
   <script id="challenge">
     // 👉 CHALLENGE 1
     function profileActivation(profile, reason) {
+        if (profile.active) {
+          if (reason) {
+            profile.active = false;
+            profile.reason = reason;
+            return profile;
+          } else {
+            return "confirm status manually";
+          }
+        }
+        else {
+          profile.active = true;
+          delete profile.reason;
+          return profile;
+        }
+      }
 
-    }
+
+
+
+
 
     // 👉 CHALLENGE 2
     function mineSweeper(grid, x, y) {
-
+      if (x < 1 || x > 3 || y < 1 || y > 3) {
+        return "invalid coordinates";
+      }
+      const value = grid[y - 1][x - 1];
+      if (value === "🟥") {
+        return "🟥 💀";
+      } else {
+        return "🟦 🥳";
+      }
     }
 
     // 👉 CHALLENGE 3
     function booleanize(obj) {
+      for (let prop in obj) {
+        if (prop.length > 9) {
+          return "shorten all prop names to 9 chars or less";
+        }
 
+        if (obj[prop] === 0) {
+          obj[prop] = false;
+        } else if (obj[prop] === 1) {
+          obj[prop] = true;
+        } else if (obj[prop] === null) {
+          delete obj[prop];
+        }
+      }
+      return obj;
     }
 
     // 👉 CHALLENGE 4
     function scrub(text, forbidden) {
+      if (text === "" || forbidden.length === 0) {
+        return text;
+      }
 
+      let words = text.split(" ");
+
+      for (let i = 0; i < words.length; i++) {
+        if (forbidden.includes(words[i].toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ""))) {
+          words[i] = "x".repeat(words[i].length);
+        }
+      }
+      return words.join(" ");
     }
+
 
     // 👉 CHALLENGE 5 (bonus, NOT graded)
     function normalizePhoneNumber(num) {
+        const formattedNumber = `(${num.slice(0, 3)}) ${num.slice(3, 6)}-${num.slice(6)}`;
 
-    }
+        return formattedNumber;
+      }
+
 
     // 👉 CHALLENGE 6 (bonus, NOT graded)
     function diceRolls() {
+        let throws = 0;
+        let counter = 0;
 
-    }
+        while (true) {
+          const roll = Math.floor(Math.random() * 6) + 1;
+          throws++;
+
+          if (roll === 6) {
+            counter++;
+            if (counter === 3) {
+              break;
+            }
+          } else {
+            counter = 0;
+          }
+        }
+
+        return throws;
+      }
+
 
     // 🧪 DO NOT make any changes below this line ===================
     globalThis.challengeVersion = 1
@@ -162,9 +234,9 @@
       else results.forEach((result, idx) => {
         if (_.isEqual(result[1], result[2])) console.log(`\t✅ Test ${idx + 1} passes`)
         else console.log(`\t❌ Test ${idx + 1} fails:
-           ${func.name}(${result[3].map(JSON.stringify)})
-           👉 should return ${JSON.stringify(result[1])}
-           👉 but returns ${JSON.stringify(result[2])}`)
+            ${func.name}(${result[3].map(JSON.stringify)})
+            👉 should return ${JSON.stringify(result[1])}
+            👉 but returns ${JSON.stringify(result[2])}`)
       })
     }
     const gridElems = [Array.from(row1.children), Array.from(row2.children), Array.from(row3.children)]
@@ -185,7 +257,7 @@
       })
     })
     phoneNumInput.oninput = evt => {
-      normalized.textContent = normalizePhoneNumber(evt.target.value)
+      normalized.textContent = normalizePhoneNumber(evt.target.value);
     }
   </script>
 </body>
